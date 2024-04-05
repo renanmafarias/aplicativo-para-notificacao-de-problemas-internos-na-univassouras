@@ -25,8 +25,7 @@ export function BiometricLogin({ onLogin }) {
       <Image
         source={require('../assets/logo-da-univassouras.png')}
         alt="Logo da Univassouras"
-        width="200"
-        height="141"
+        style={styles.img}
       />
       <Text style={styles.title}>Entrar</Text>
       <Text style={styles.message}>
@@ -69,5 +68,9 @@ const styles = StyleSheet.create({
   },
   buttonText: {
     color: '#ffffff',
+  },
+  img: {
+    width: 200,
+    height: 141,
   }
 });

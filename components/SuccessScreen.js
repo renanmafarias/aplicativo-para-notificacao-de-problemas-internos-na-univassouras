@@ -8,14 +8,14 @@ export function SuccessScreen({ onOpenCamera, onLogout }) {
   return (
     <View style={styles.container}>
       <Text style={styles.message}>Bem Vindo !</Text>
-      <View style={styles.buttonContainer}>
-        <TouchableOpacity style={styles.button} >
+      <View style={styles.navigationContainer}>
+        <TouchableOpacity style={styles.navButton} onPress={onOpenCamera}>
           <FontAwesome5 name="map-marked" size={24} color="white" />
         </TouchableOpacity>
-        <TouchableOpacity style={styles.button} onPress={onOpenCamera}>
+        <TouchableOpacity style={styles.navButton} onPress={onOpenCamera}>
           <Feather name="camera" size={24} color="white" />
         </TouchableOpacity>
-        <TouchableOpacity style={styles.button} onPress={onLogout}>
+        <TouchableOpacity style={styles.navButton} onPress={onLogout}>
           <Entypo name="log-out" size={24} color="white" />
         </TouchableOpacity>
       </View>
@@ -33,26 +33,20 @@ const styles = StyleSheet.create({
   message: {
     fontSize: 20,
     marginBottom: 20,
-    textAlign: 'center',
   },
-  buttonContainer: {
+  navigationContainer: {
     position: 'absolute',
     bottom: 0,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    width: '100%',
-    paddingHorizontal: 40,
-    paddingBottom: 20, // Espaçamento entre os botões e a parte inferior da tela
-  },
-  button: {
     backgroundColor: '#6D1D20',
-    paddingTop: 15,
-    paddingRight: 30,
-    paddingBottom: 15,
-    paddingLeft: 30,
-    borderRadius: 10,
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    width: '100%',
+    paddingBottom: 20,
   },
-  buttonText: {
-    color: '#ffffff',
-  }
+  navButton: {
+    paddingVertical: 3,
+    paddingHorizontal: 30,
+    marginTop: 15,
+  },
 });
+
