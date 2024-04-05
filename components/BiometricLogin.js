@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, Image, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import * as LocalAuthentication from 'expo-local-authentication';
+import { Ionicons } from '@expo/vector-icons';
 
 export function BiometricLogin({ onLogin }) {
   const [biometricsAvailable, setBiometricsAvailable] = useState(false);
@@ -21,14 +22,21 @@ export function BiometricLogin({ onLogin }) {
 
   return (
     <View style={styles.container}>
-      <Text>
+      <Image
+        source={require('../assets/logo-da-univassouras.png')}
+        alt="Logo da Univassouras"
+        width="200"
+        height="141"
+      />
+      <Text style={styles.title}>Entrar</Text>
+      <Text style={styles.message}>
         {biometricsAvailable
-          ? 'Faça o login com biometria'
+          ? 'Faça o login !'
           : 'Dispositivo não compatível com biometrias'}
       </Text>
       {biometricsAvailable && (
         <TouchableOpacity style={styles.button} onPress={handleLogin}>
-          <Text>Login com Biometria</Text>
+          <Ionicons name="finger-print-sharp" size={24} color="white" />
         </TouchableOpacity>
       )}
     </View>
@@ -38,14 +46,28 @@ export function BiometricLogin({ onLogin }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: '#ffffff',
     alignItems: 'center',
     justifyContent: 'center',
   },
-  button: {
-    backgroundColor: 'green',
-    padding: 10,
-    borderRadius: 5,
-    marginTop: 10,
+  title: {
+    marginTop: 90,
+    fontSize: 32
   },
+  message: {
+    fontSize: 20
+  },
+  button: {
+    backgroundColor: '#6D1D20',
+    color: '#ffffff',
+    paddingTop: 15,
+    paddingRight: 30,
+    paddingBottom: 15,
+    paddingLeft: 30,
+    borderRadius: 10,
+    marginTop: 30,
+  },
+  buttonText: {
+    color: '#ffffff',
+  }
 });

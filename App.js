@@ -16,13 +16,21 @@ export default function App() {
     setCameraOpen(true);
   };
 
+  const handleCloseCamera = () => {
+    setCameraOpen(false);
+  };
+
+  const handleLogout = () => {
+    setLoggedIn(false);
+  };
+
   return (
     <View style={styles.container}>
       {loggedIn ? (
         cameraOpen ? (
-          <CameraScreen />
+          <CameraScreen onCloseCamera={handleCloseCamera} />
         ) : (
-          <SuccessScreen onOpenCamera={handleOpenCamera} />
+          <SuccessScreen onOpenCamera={handleOpenCamera} onLogout={handleLogout} />
         )
       ) : (
         <BiometricLogin onLogin={handleLogin} />

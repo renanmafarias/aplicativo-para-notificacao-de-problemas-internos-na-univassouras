@@ -2,14 +2,17 @@ import React, { useState, useEffect, useRef } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Image, Modal } from 'react-native';
 import { Camera } from 'expo-camera';
 import * as MediaLibrary from 'expo-media-library';
+import { Feather } from '@expo/vector-icons';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { AntDesign } from '@expo/vector-icons';
 
-export function CameraScreen() {
+export function CameraScreen({ onCloseCamera }) {
   const ref = useRef(null);
   const [hasPermission, setHasPermission] = useState(null);
   const [type, setType] = useState(Camera.Constants.Type.back);
   const [captured, setCaptured] = useState(null);
   const [open, setOpen] = useState(false);
-  const [showMessage, setShowMessage] = useState(false); // Estado para controlar a exibição da mensagem
+  const [showMessage, setShowMessage] = useState(false);
 
   useEffect(() => {
     (async () => {
@@ -30,16 +33,16 @@ export function CameraScreen() {
     if (captured) {
       await MediaLibrary.saveToLibraryAsync(captured);
       setOpen(false);
-      setShowMessage(true); // Exibe a mensagem após salvar a imagem
+      setShowMessage(true);
       setTimeout(() => {
-        setShowMessage(false); // Oculta a mensagem após 3 segundos
+        setShowMessage(false);
       }, 3000);
     }
   };
 
   const closePreview = () => {
     setOpen(false);
-    setCaptured(null); // Reset the captured image URI
+    setCaptured(null);
   };
 
   return (
@@ -49,6 +52,12 @@ export function CameraScreen() {
       ) : (
         <Camera style={styles.camera} type={type} ref={ref}>
           <View style={styles.buttonContainer}>
+            <TouchableOpacity style={styles.closeButton} onPress={onCloseCamera}>
+              <AntDesign name="close" size={24} color="black" />
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.buttonTake} onPress={takePicture}>
+              <Feather name="camera" size={24} color="white" />
+            </TouchableOpacity>
             <TouchableOpacity
               style={styles.button}
               onPress={() => {
@@ -58,10 +67,7 @@ export function CameraScreen() {
                     : Camera.Constants.Type.back
                 );
               }}>
-              <Image style={styles.icon} source={require("../assets/flip.png")} />
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.button} onPress={takePicture}>
-              <Image style={styles.icon} source={require("../assets/camera.png")} />
+              <MaterialCommunityIcons name="camera-flip-outline" size={24} color="black" />
             </TouchableOpacity>
           </View>
         </Camera>
@@ -69,12 +75,12 @@ export function CameraScreen() {
       <Modal transparent={true} visible={open}>
         <View style={styles.modalContainer}>
           <Image style={styles.imagePreview} source={{ uri: captured }} />
-          <TouchableOpacity style={styles.closeButton} onPress={closePreview}>
-            <Image style={styles.closeIcon} source={require("../assets/close.png")} />
+          <TouchableOpacity style={styles.close} onPress={closePreview}>
+            <AntDesign name="closecircleo" size={24} color="white" />
           </TouchableOpacity>
           <View style={styles.bottomButtonContainer}>
             <TouchableOpacity style={styles.button} onPress={savePhoto}>
-              <Text>Salvar na galeria</Text>
+              <AntDesign name="save" size={24} color="black" />
             </TouchableOpacity>
           </View>
         </View>
@@ -100,11 +106,20 @@ const styles = StyleSheet.create({
     position: 'absolute',
     bottom: 20,
     flexDirection: 'row',
-    justifyContent: 'space-between',
+    justifyContent: 'space-around',
     width: '100%',
-    paddingHorizontal: 20,
   },
   button: {
+    backgroundColor: 'rgba(255, 255, 255, 0.5)',
+    padding: 10,
+    borderRadius: 5,
+  },
+  buttonTake: {
+    backgroundColor: '#6D1D20',
+    padding: 10,
+    borderRadius: 5,
+  },
+  closeButton: {
     backgroundColor: 'rgba(255, 255, 255, 0.5)',
     padding: 10,
     borderRadius: 5,
@@ -124,28 +139,24 @@ const styles = StyleSheet.create({
     height: 300,
     marginBottom: 20,
   },
-  closeButton: {
+  close: {
     position: 'absolute',
-    top: 160,
-    backgroundColor: 'rgba(255, 255, 255, 0.5)',
-  },
-  closeIcon: {
-    width: 30,
-    height: 30,
-    backgroundColor: 'rgba(255, 255, 255, 0.5)',
+    top: 170,
   },
   bottomButtonContainer: {
     position: 'absolute',
-    bottom: 170, 
+    bottom: 165,
+    width: '100%',
+    alignItems: 'center',
   },
   messageContainer: {
     position: 'absolute',
-    bottom: 20,
+    bottom: 670,
     width: '100%',
     alignItems: 'center',
   },
   messageText: {
-    backgroundColor: '#4CAF50',
+    backgroundColor: '#6D1D20',
     paddingHorizontal: 20,
     paddingVertical: 10,
     borderRadius: 10,
