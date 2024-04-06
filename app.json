@@ -7,9 +7,9 @@
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
     "splash": {
-      "image": "./logo_vertical.png",
+      "image": "./UniVassouras-Vertical-Branca.png",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#6D1D20"
     },
     "assetBundlePatterns": [
       "**/*"
