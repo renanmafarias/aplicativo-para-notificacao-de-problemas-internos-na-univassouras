@@ -3,10 +3,12 @@ import { View, StyleSheet } from 'react-native';
 import { BiometricLogin } from './components/BiometricLogin';
 import { SuccessScreen } from './components/SuccessScreen';
 import { CameraScreen } from './components/CameraScreen';
+import MapViewComponent from './components/MapViewComponent';
 
 export default function App() {
   const [loggedIn, setLoggedIn] = useState(false);
   const [cameraOpen, setCameraOpen] = useState(false);
+  const [mapOpen, setMapOpen] = useState(false); // Estado para controlar se o mapa está aberto
 
   const handleLogin = () => {
     setLoggedIn(true);
@@ -20,6 +22,14 @@ export default function App() {
     setCameraOpen(false);
   };
 
+  const handleOpenMap = () => {
+    setMapOpen(true);
+  };
+
+  const handleGoBack = () => {
+    setMapOpen(false);
+  };
+
   const handleLogout = () => {
     setLoggedIn(false);
   };
@@ -29,8 +39,10 @@ export default function App() {
       {loggedIn ? (
         cameraOpen ? (
           <CameraScreen onCloseCamera={handleCloseCamera} />
+        ) : mapOpen ? ( // Renderiza o mapa se mapOpen for verdadeiro
+          <MapViewComponent onGoBack={handleGoBack} />
         ) : (
-          <SuccessScreen onOpenCamera={handleOpenCamera} onLogout={handleLogout} />
+          <SuccessScreen onOpenCamera={handleOpenCamera} onLogout={handleLogout} onOpenMap={handleOpenMap} /> // Adiciona a função onOpenMap
         )
       ) : (
         <BiometricLogin onLogin={handleLogin} />

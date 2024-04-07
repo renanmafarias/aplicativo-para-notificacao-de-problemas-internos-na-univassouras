@@ -4,12 +4,12 @@ import { Feather } from '@expo/vector-icons';
 import { Entypo } from '@expo/vector-icons';
 import { FontAwesome5 } from '@expo/vector-icons';
 
-export function SuccessScreen({ onOpenCamera, onLogout }) {
+export function SuccessScreen({ onOpenCamera, onLogout, onOpenMap }) {
   return (
     <View style={styles.container}>
       <Text style={styles.message}>Bem Vindo !</Text>
       <View style={styles.navigationContainer}>
-        <TouchableOpacity style={styles.navButton} onPress={onOpenCamera}>
+        <TouchableOpacity style={styles.navButton} onPress={onOpenMap}>
           <FontAwesome5 name="map-marked" size={24} color="white" />
         </TouchableOpacity>
         <TouchableOpacity style={styles.navButton} onPress={onOpenCamera}>
