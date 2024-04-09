@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, Text, ImageBackground, TouchableOpacity, StyleSheet } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 import { Entypo } from '@expo/vector-icons';
 import { FontAwesome5 } from '@expo/vector-icons';
@@ -7,7 +7,11 @@ import { FontAwesome5 } from '@expo/vector-icons';
 export function SuccessScreen({ onOpenCamera, onLogout, onOpenMap }) {
   return (
     <View style={styles.container}>
-      <Text style={styles.message}>Bem Vindo !</Text>
+      <ImageBackground source={require('../assets/campus-da-univassouras.jpg')} style={styles.imageSection} />
+      <View style={styles.contentSection}>
+        <Text style={styles.title}>Seja bem-vindo!</Text>
+        <Text style={styles.message}>Navegue pelo aplicativo a partir dos botões abaixo</Text>
+      </View>
       <View style={styles.navigationContainer}>
         <TouchableOpacity style={styles.navButton} onPress={onOpenMap}>
           <FontAwesome5 name="map-marked" size={24} color="white" />
@@ -26,16 +30,27 @@ export function SuccessScreen({ onOpenCamera, onLogout, onOpenMap }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
+  },
+  imageSection: {
+    width: '100%',
+    flex: 4
+  },
+  contentSection: {
+    flex: 6,
     justifyContent: 'center',
+    alignItems: 'center'
+  },
+  title: {
+    fontSize: 40,
+    fontWeight: '700',
   },
   message: {
+    margin: 20,
     fontSize: 20,
-    marginBottom: 20,
+    textAlign: 'center'
   },
   navigationContainer: {
-    position: 'absolute',
+    position: 'relative',
     bottom: 0,
     backgroundColor: '#6D1D20',
     flexDirection: 'row',

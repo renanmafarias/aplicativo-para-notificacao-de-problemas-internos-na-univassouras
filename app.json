@@ -7,7 +7,7 @@
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
     "splash": {
-      "image": "./UniVassouras-Vertical-Branca.png",
+      "image": "./assets/logo-branca-da-univassouras.png",
       "resizeMode": "contain",
       "backgroundColor": "#6D1D20"
     },

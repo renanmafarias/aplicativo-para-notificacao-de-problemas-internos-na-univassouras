@@ -30,7 +30,7 @@ export function BiometricLogin({ onLogin }) {
       <Text style={styles.title}>Entrar</Text>
       <Text style={styles.message}>
         {biometricsAvailable
-          ? 'Faça o login !'
+          ? 'Clique no botão abaixo para fazer o login por biometria'
           : 'Dispositivo não compatível com biometrias'}
       </Text>
       {biometricsAvailable && (
@@ -45,16 +45,19 @@ export function BiometricLogin({ onLogin }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#ffffff',
-    alignItems: 'center',
     justifyContent: 'center',
+    alignItems: 'center',
   },
   title: {
     marginTop: 90,
-    fontSize: 32
+    fontSize: 40,
+    fontWeight: '700'
   },
   message: {
-    fontSize: 20
+    margin: 20,
+    marginBottom: 40,
+    fontSize: 20,
+    textAlign: 'center'
   },
   button: {
     backgroundColor: '#6D1D20',
@@ -64,7 +67,6 @@ const styles = StyleSheet.create({
     paddingBottom: 15,
     paddingLeft: 30,
     borderRadius: 10,
-    marginTop: 30,
   },
   buttonText: {
     color: '#ffffff',

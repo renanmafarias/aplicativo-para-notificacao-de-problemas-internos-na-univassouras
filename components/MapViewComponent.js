@@ -29,6 +29,9 @@ export default function MapViewComponent( {onGoBack} ) {
 
   return (
     <View style={styles.container}>
+      <View style={styles.titleSection}>
+        <Text style={styles.title}>Localização</Text>
+      </View>
       <MapView
         loadingEnabled={true}
         region={
@@ -63,9 +66,11 @@ export default function MapViewComponent( {onGoBack} ) {
           description="Nosso local de aula."
         />
       </MapView>
-      <TouchableOpacity style={styles.button} onPress={onGoBack}> 
-        <Text style={styles.buttonText}>Voltar</Text>
-      </TouchableOpacity>
+      <View style={styles.buttonSection}>
+        <TouchableOpacity style={styles.button} onPress={onGoBack}> 
+          <Text style={styles.buttonText}>Voltar</Text>
+        </TouchableOpacity>
+      </View>
     </View>
   );
 }
@@ -73,22 +78,34 @@ export default function MapViewComponent( {onGoBack} ) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
+  },
+  titleSection: {
+    flex: 2,
     justifyContent: 'center',
+    paddingLeft: 20,
+    backgroundColor: '#6D1D20'
+  },
+  title: {
+    color: '#ffffff',
+    fontSize: 40,
+    fontWeight: '700'
   },
   map: {
-    width: '100%',
-    height: '80%',
+    flex: 8
+  },
+  buttonSection: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingLeft: 20,
   },
   button: {
     backgroundColor: '#6D1D20',
     padding: 10,
     borderRadius: 5,
-    marginTop: 10, // Espaço acima do botão
   },
   buttonText: {
-    color: '#fff',
+    color: '#ffffff',
     fontSize: 16,
     fontWeight: 'bold',
   },
