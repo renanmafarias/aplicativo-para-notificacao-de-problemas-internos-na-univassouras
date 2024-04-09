@@ -22,9 +22,7 @@ export default function MapViewComponent({ onGoBack }) {
   }, []);
 
   const handleMapPress = (event) => {
-    if (!newMarkerCoords) { // Verifica se não há novo marcador
-      setNewMarkerCoords(event.nativeEvent.coordinate);
-    }
+    setNewMarkerCoords(event.nativeEvent.coordinate);
   };
 
   let text = 'Aguarde...';
@@ -71,6 +69,7 @@ export default function MapViewComponent({ onGoBack }) {
             coordinate={newMarkerCoords}
             pinColor="red" 
             title="Novo Marcador"
+            description="Novo local de aula"
           />
         )}
       </MapView>
