@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import MapView, { Marker } from 'react-native-maps';
-import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
+import { StyleSheet, View, TouchableOpacity, Text } from 'react-native';
 import * as Location from 'expo-location';
 
-export default function MapViewComponent( {onGoBack} ) {
+export default function MapViewComponent({ onGoBack }) {
   const [location, setLocation] = useState(null);
   const [errorMsg, setErrorMsg] = useState(null);
+  const [newMarkerCoords, setNewMarkerCoords] = useState(null);
 
   useEffect(() => {
     (async () => {
@@ -20,6 +21,12 @@ export default function MapViewComponent( {onGoBack} ) {
     })();
   }, []);
 
+  const handleMapPress = (event) => {
+    if (!newMarkerCoords) { // Verifica se não há novo marcador
+      setNewMarkerCoords(event.nativeEvent.coordinate);
+    }
+  };
+
   let text = 'Aguarde...';
   if (errorMsg) {
     text = errorMsg;
@@ -31,39 +38,40 @@ export default function MapViewComponent( {onGoBack} ) {
     <View style={styles.container}>
       <MapView
         loadingEnabled={true}
+        onPress={handleMapPress} 
         region={
-            location
+          location
             ? {
                 latitude: location.latitude,
                 longitude: location.longitude,
                 latitudeDelta: 0.005,
                 longitudeDelta: 0.005,
-                }
+              }
             : undefined
         }
         style={styles.map}
-        >
-        <Marker
-          coordinate={
-            !location
-              ? {
-                  latitude: 0,
-                  longitude: 0,
-                  latitudeDelta: 0,
-                  longitudeDelta: 1000,
-                }
-              : {
-                  latitude: location.latitude,
-                  longitude: location.longitude,
-                  latitudeDelta: 0.005,
-                  longitudeDelta: 0.005,
-                }
-          }
-          title="Eu estou aqui!"
-          description="Nosso local de aula."
-        />
+      >
+        {location && (
+          <Marker
+            coordinate={{
+              latitude: location.latitude,
+              longitude: location.longitude,
+            }}
+            pinColor="blue" 
+            draggable={false} 
+            title="Minha Localização"
+            description="Meu local de aula"
+          />
+        )}
+        {newMarkerCoords && (
+          <Marker
+            coordinate={newMarkerCoords}
+            pinColor="red" 
+            title="Novo Marcador"
+          />
+        )}
       </MapView>
-      <TouchableOpacity style={styles.button} onPress={onGoBack}> 
+      <TouchableOpacity style={styles.button} onPress={onGoBack}>
         <Text style={styles.buttonText}>Voltar</Text>
       </TouchableOpacity>
     </View>
@@ -82,14 +90,14 @@ const styles = StyleSheet.create({
     height: '80%',
   },
   button: {
+    position: 'absolute',
+    bottom: 20,
     backgroundColor: '#6D1D20',
     padding: 10,
     borderRadius: 5,
-    marginTop: 10, // Espaço acima do botão
   },
   buttonText: {
     color: '#fff',
-    fontSize: 16,
     fontWeight: 'bold',
   },
 });
