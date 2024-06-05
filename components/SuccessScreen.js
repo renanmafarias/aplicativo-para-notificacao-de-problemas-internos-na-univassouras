@@ -4,7 +4,7 @@ import { Feather } from '@expo/vector-icons';
 import { Entypo } from '@expo/vector-icons';
 import { FontAwesome5 } from '@expo/vector-icons';
 
-export function SuccessScreen({ onOpenCamera, onLogout, onOpenMap }) {
+export function SuccessScreen({ onOpenAddRecord, onLogout }) {
   return (
     <View style={styles.container}>
       <ImageBackground source={require('../assets/campus-da-univassouras.jpg')} style={styles.imageSection} />
@@ -13,11 +13,8 @@ export function SuccessScreen({ onOpenCamera, onLogout, onOpenMap }) {
         <Text style={styles.message}>Navegue pelo aplicativo a partir dos botões abaixo</Text>
       </View>
       <View style={styles.navigationContainer}>
-        <TouchableOpacity style={styles.navButton} onPress={onOpenMap}>
-          <FontAwesome5 name="map-marked" size={24} color="white" />
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.navButton} onPress={onOpenCamera}>
-          <Feather name="camera" size={24} color="white" />
+        <TouchableOpacity style={styles.navButton} onPress={onOpenAddRecord}>
+          <FontAwesome5 name="plus" size={24} color="white" />
         </TouchableOpacity>
         <TouchableOpacity style={styles.navButton} onPress={onLogout}>
           <Entypo name="log-out" size={24} color="white" />
@@ -64,4 +61,3 @@ const styles = StyleSheet.create({
     marginTop: 15,
   },
 });
-

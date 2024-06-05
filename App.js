@@ -4,45 +4,35 @@ import { BiometricLogin } from './components/BiometricLogin';
 import { SuccessScreen } from './components/SuccessScreen';
 import { CameraScreen } from './components/CameraScreen';
 import MapViewComponent from './components/MapViewComponent';
+import { AddRecordScreen } from './components/AddRecordScreen';
 
 export default function App() {
   const [loggedIn, setLoggedIn] = useState(false);
   const [cameraOpen, setCameraOpen] = useState(false);
-  const [mapOpen, setMapOpen] = useState(false); // Estado para controlar se o mapa está aberto
+  const [mapOpen, setMapOpen] = useState(false);
+  const [addingRecord, setAddingRecord] = useState(false);
 
-  const handleLogin = () => {
-    setLoggedIn(true);
-  };
-
-  const handleOpenCamera = () => {
-    setCameraOpen(true);
-  };
-
-  const handleCloseCamera = () => {
-    setCameraOpen(false);
-  };
-
-  const handleOpenMap = () => {
-    setMapOpen(true);
-  };
-
+  const handleLogin = () => setLoggedIn(true);
+  const handleOpenCamera = () => setCameraOpen(true);
+  const handleCloseCamera = () => setCameraOpen(false);
+  const handleOpenMap = () => setMapOpen(true);
   const handleGoBack = () => {
     setMapOpen(false);
+    setAddingRecord(false);
   };
-
-  const handleLogout = () => {
-    setLoggedIn(false);
-  };
+  const handleLogout = () => setLoggedIn(false);
+  const handleOpenAddRecord = () => setAddingRecord(true);
 
   return (
     <View style={styles.container}>
       {loggedIn ? (
-        cameraOpen ? (
-          <CameraScreen onCloseCamera={handleCloseCamera} />
-        ) : mapOpen ? ( // Renderiza o mapa se mapOpen for verdadeiro
-          <MapViewComponent onGoBack={handleGoBack} />
+        addingRecord ? (
+          <AddRecordScreen onGoBack={handleGoBack} />
         ) : (
-          <SuccessScreen onOpenCamera={handleOpenCamera} onLogout={handleLogout} onOpenMap={handleOpenMap} /> // Adiciona a função onOpenMap
+          <SuccessScreen 
+            onOpenAddRecord={handleOpenAddRecord} 
+            onLogout={handleLogout} 
+          />
         )
       ) : (
         <BiometricLogin onLogin={handleLogin} />
