@@ -1,10 +1,9 @@
 import React from 'react';
 import { View, Text, ImageBackground, TouchableOpacity, StyleSheet } from 'react-native';
-import { Feather } from '@expo/vector-icons';
 import { Entypo } from '@expo/vector-icons';
 import { FontAwesome5 } from '@expo/vector-icons';
 
-export function SuccessScreen({ onOpenAddRecord, onLogout }) {
+export function SuccessScreen({ onOpenAddRecord, onOpenListRecords, onLogout }) {
   return (
     <View style={styles.container}>
       <ImageBackground source={require('../assets/campus-da-univassouras.jpg')} style={styles.imageSection} />
@@ -15,6 +14,9 @@ export function SuccessScreen({ onOpenAddRecord, onLogout }) {
       <View style={styles.navigationContainer}>
         <TouchableOpacity style={styles.navButton} onPress={onOpenAddRecord}>
           <FontAwesome5 name="plus" size={24} color="white" />
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.navButton} onPress={onOpenListRecords}>
+          <FontAwesome5 name="list" size={24} color="white" /> 
         </TouchableOpacity>
         <TouchableOpacity style={styles.navButton} onPress={onLogout}>
           <Entypo name="log-out" size={24} color="white" />
@@ -30,12 +32,12 @@ const styles = StyleSheet.create({
   },
   imageSection: {
     width: '100%',
-    flex: 4
+    flex: 4,
   },
   contentSection: {
     flex: 6,
     justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
   },
   title: {
     fontSize: 40,
@@ -44,7 +46,7 @@ const styles = StyleSheet.create({
   message: {
     margin: 20,
     fontSize: 20,
-    textAlign: 'center'
+    textAlign: 'center',
   },
   navigationContainer: {
     position: 'relative',
