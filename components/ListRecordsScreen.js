@@ -1,36 +1,62 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, FlatList, TouchableOpacity, StyleSheet } from 'react-native';
-import { AntDesign } from '@expo/vector-icons'; 
-import { FontAwesome5 } from '@expo/vector-icons';
+import { AntDesign, FontAwesome5 } from '@expo/vector-icons'; 
+import { fetchRecords, deleteRecord, syncRecordsWithFirebase } from '../database';
 
-export function ListRecordsScreen({ onGoBack, onOpenAddRecord }) {
-  const records = []; 
+export default function ListRecordsScreen({ navigation }) {
+  const [records, setRecords] = useState([]);
 
-  const renderItem = ({ item }) => (
+  const renderRecord = ({ item }) => (
     <View style={styles.recordItem}>
-      <Text style={styles.recordText}>{item.title}</Text>
-      <Text style={styles.recordText}>{item.complete ? 'Completo' : 'Incompleto'}</Text>
+      <Text style={styles.recordText}>{item.description}</Text>
+      <TouchableOpacity
+        onPress={() => {
+          navigation.navigate('Atualizar registro', {recordId : item.id});
+        }}>
+          <Text>Editar</Text>
+      </TouchableOpacity>
+      <TouchableOpacity onPress={() => handleRecordDeletion(item.id)}>
+        <Text>Deletar</Text>
+      </TouchableOpacity>
     </View>
   );
 
+  useEffect(() => {
+    loadRecords();
+  }, []);
+
+  const loadRecords = () => {
+    fetchRecords((success, records) => {
+      syncRecordsWithFirebase();
+      if (success) setRecords(records);
+    });
+  };
+
+  const handleRecordDeletion = (recordId) => {
+    deleteRecord(recordId, (success, records) => {
+      if (success) {
+        loadRecords();
+      }
+    });
+  };
+
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Listagem de Problemas</Text>
+      <Text style={styles.title}>Listagem de registros</Text>
       {records.length === 0 ? (
-        <Text style={styles.noRecordsText}>Não existe registro de problema.</Text>
-      ) : (
-        <FlatList
-          data={records}
-          keyExtractor={(item) => item.id}
-          renderItem={renderItem}
-          contentContainerStyle={styles.listContainer}
-        />
-      )}
+          <Text style={styles.noRecordsText}>Não existe registro de problema</Text>
+        ) : (
+          <FlatList
+            data={records}
+            keyExtractor={record => record.id}
+            renderItem={renderRecord}
+          />
+        )}
       <View style={styles.bottomBar}>
-        <TouchableOpacity style={styles.button} onPress={onGoBack}>
+        <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Home')}>
           <AntDesign name="home" size={24} color="white" />
         </TouchableOpacity>
-        <TouchableOpacity style={styles.button} onPress={onOpenAddRecord}>
+        <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Adicionar registro')}>
           <FontAwesome5 name="plus" size={24} color="white" />
         </TouchableOpacity>
       </View>
@@ -41,8 +67,8 @@ export function ListRecordsScreen({ onGoBack, onOpenAddRecord }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
-    paddingTop: 20,
+    justifyContent: 'center',
+    padding: 20,
   },
   title: {
     fontSize: 24,
@@ -55,9 +81,6 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     marginTop: 20,
   },
-  listContainer: {
-    padding: 20,
-  },
   recordItem: {
     backgroundColor: '#f9c2ff',
     padding: 20,
@@ -66,6 +89,14 @@ const styles = StyleSheet.create({
   },
   recordText: {
     fontSize: 16,
+  },
+  input: {
+    height: 100, // Ajuste a altura para um valor maior
+    borderColor: '#ccc',
+    borderWidth: 1,
+    marginBottom: 20,
+    padding: 10,
+    textAlignVertical: 'top', // Alinha o texto no topo do TextInput
   },
   bottomBar: {
     position: 'absolute',
@@ -81,7 +112,11 @@ const styles = StyleSheet.create({
   },
   button: {
     backgroundColor: '#6D1D20',
-    borderRadius: 20,
+    borderRadius: 5,
     padding: 10,
   },
+  buttonText: {
+    color: '#fff',
+    textAlign: 'center',
+  }
 });

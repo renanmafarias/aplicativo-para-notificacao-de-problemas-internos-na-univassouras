@@ -3,7 +3,7 @@ import MapView, { Marker } from 'react-native-maps';
 import { StyleSheet, View, TouchableOpacity, Text } from 'react-native';
 import * as Location from 'expo-location';
 
-export default function MapViewComponent({ onGoBack }) {
+export default function MapScreen({ navigation }) {
   const [location, setLocation] = useState(null);
   const [errorMsg, setErrorMsg] = useState(null);
   const [newMarkerCoords, setNewMarkerCoords] = useState(null);
@@ -34,9 +34,6 @@ export default function MapViewComponent({ onGoBack }) {
 
   return (
     <View style={styles.container}>
-      <View style={styles.titleSection}>
-        <Text style={styles.title}>Localização</Text>
-      </View>
       <MapView
         loadingEnabled={true}
         onPress={handleMapPress} 
@@ -74,7 +71,7 @@ export default function MapViewComponent({ onGoBack }) {
         )}
       </MapView>
       <View style={styles.buttonSection}>
-        <TouchableOpacity style={styles.button} onPress={onGoBack}> 
+        <TouchableOpacity style={styles.button} onPress={() => navigation.goBack()}> 
           <Text style={styles.buttonText}>Voltar</Text>
         </TouchableOpacity>
       </View>
@@ -85,17 +82,6 @@ export default function MapViewComponent({ onGoBack }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-  },
-  titleSection: {
-    flex: 2,
-    justifyContent: 'center',
-    paddingLeft: 20,
-    backgroundColor: '#6D1D20'
-  },
-  title: {
-    color: '#ffffff',
-    fontSize: 40,
-    fontWeight: '700'
   },
   map: {
     flex: 8

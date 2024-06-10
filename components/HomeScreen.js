@@ -1,9 +1,9 @@
 import React from 'react';
 import { View, Text, ImageBackground, TouchableOpacity, StyleSheet } from 'react-native';
-import { Entypo } from '@expo/vector-icons';
-import { FontAwesome5 } from '@expo/vector-icons';
+import { Entypo, FontAwesome5 } from '@expo/vector-icons';
+import { syncRecordsWithFirebase } from '../database';
 
-export function SuccessScreen({ onOpenAddRecord, onOpenListRecords, onLogout }) {
+export default function HomeScreen({ navigation }) {
   return (
     <View style={styles.container}>
       <ImageBackground source={require('../assets/campus-da-univassouras.jpg')} style={styles.imageSection} />
@@ -12,13 +12,13 @@ export function SuccessScreen({ onOpenAddRecord, onOpenListRecords, onLogout }) 
         <Text style={styles.message}>Navegue pelo aplicativo a partir dos botões abaixo</Text>
       </View>
       <View style={styles.navigationContainer}>
-        <TouchableOpacity style={styles.navButton} onPress={onOpenAddRecord}>
+        <TouchableOpacity style={styles.navButton} onPress={() => navigation.navigate('Adicionar registro')}>
           <FontAwesome5 name="plus" size={24} color="white" />
         </TouchableOpacity>
-        <TouchableOpacity style={styles.navButton} onPress={onOpenListRecords}>
+        <TouchableOpacity style={styles.navButton} onPress={() => navigation.navigate('Listar registros')}>
           <FontAwesome5 name="list" size={24} color="white" /> 
         </TouchableOpacity>
-        <TouchableOpacity style={styles.navButton} onPress={onLogout}>
+        <TouchableOpacity style={styles.navButton} onPress={() => navigation.navigate('Login')}>
           <Entypo name="log-out" size={24} color="white" />
         </TouchableOpacity>
       </View>

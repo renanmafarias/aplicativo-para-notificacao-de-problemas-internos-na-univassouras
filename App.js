@@ -1,53 +1,28 @@
-import React, { useState } from 'react';
-import { View, StyleSheet } from 'react-native';
-import { BiometricLogin } from './components/BiometricLogin';
-import { SuccessScreen } from './components/SuccessScreen';
-import { AddRecordScreen } from './components/AddRecordScreen';
-import { ListRecordsScreen } from './components/ListRecordsScreen'; 
+import React from 'react';
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import LoginScreen from './components/LoginScreen';
+import HomeScreen from './components/HomeScreen';
+import ListRecordsScreen from './components/ListRecordsScreen';
+import AddRecordScreen from './components/AddRecordScreen';
+import UpdateRecordScreen from './components/UpdateRecordScreen';
+import CameraScreen from './components/CameraScreen';
+import MapScreen from './components/MapScreen';
+
+const Stack = createNativeStackNavigator();
 
 export default function App() {
-  const [loggedIn, setLoggedIn] = useState(false);
-  const [addingRecord, setAddingRecord] = useState(false);
-  const [listingRecords, setListingRecords] = useState(false); 
-
-  const handleLogin = () => setLoggedIn(true);
-  const handleOpenAddRecord = () => setAddingRecord(true);
-  const handleOpenListRecords = () => setListingRecords(true); 
-  const handleGoBack = () => {
-    setAddingRecord(false);
-    setListingRecords(false); 
-  };
-
-  const handleGoBackList = () => {
-    setAddingRecord(false);
-  };
-
-  const handleLogout = () => setLoggedIn(false);
-
   return (
-    <View style={styles.container}>
-      {loggedIn ? (
-        addingRecord ? (
-          <AddRecordScreen onGoBack={handleGoBackList} />
-        ) : listingRecords ? (
-          <ListRecordsScreen onGoBack={handleGoBack} onOpenAddRecord={handleOpenAddRecord} /> 
-        ) : (
-          <SuccessScreen 
-            onOpenAddRecord={handleOpenAddRecord} 
-            onOpenListRecords={handleOpenListRecords} 
-            onLogout={handleLogout} 
-          />
-        )
-      ) : (
-        <BiometricLogin onLogin={handleLogin} />
-      )}
-    </View>
+    <NavigationContainer>
+      <Stack.Navigator initialRouteName="Login" screenOptions={{headerStyle : {backgroundColor : '#6D1D20'}, headerTintColor : '#fff', headerBackVisible : false}}>
+        <Stack.Screen name="Login" component={LoginScreen}></Stack.Screen>
+        <Stack.Screen name="Home" component={HomeScreen}></Stack.Screen>
+        <Stack.Screen name="Listar registros" component={ListRecordsScreen}></Stack.Screen>
+        <Stack.Screen name="Adicionar registro" component={AddRecordScreen}></Stack.Screen>
+        <Stack.Screen name="Atualizar registro" component={UpdateRecordScreen}></Stack.Screen>
+        <Stack.Screen name="Câmera" component={CameraScreen}></Stack.Screen>
+        <Stack.Screen name="Mapa" component={MapScreen}></Stack.Screen>
+      </Stack.Navigator>
+    </NavigationContainer>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-  },
-});

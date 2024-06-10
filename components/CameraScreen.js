@@ -6,7 +6,7 @@ import { Feather } from '@expo/vector-icons';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { AntDesign } from '@expo/vector-icons';
 
-export function CameraScreen({ onCloseCamera }) {
+export default function CameraScreen({ navigation }) {
   const ref = useRef(null);
   const [hasPermission, setHasPermission] = useState(null);
   const [type, setType] = useState(Camera.Constants.Type.back);
@@ -52,7 +52,7 @@ export function CameraScreen({ onCloseCamera }) {
       ) : (
         <Camera style={styles.camera} type={type} ref={ref}>
           <View style={styles.buttonContainer}>
-            <TouchableOpacity style={styles.closeButton} onPress={onCloseCamera}>
+            <TouchableOpacity style={styles.closeButton} onPress={() => navigation.goBack()}>
               <AntDesign name="close" size={24} color="black" />
             </TouchableOpacity>
             <TouchableOpacity style={styles.buttonTake} onPress={takePicture}>

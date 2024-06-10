@@ -3,7 +3,6 @@
     "name": "Univassouras",
     "slug": "Univassouras",
     "version": "1.0.0",
-    "orientation": "portrait",
     "icon": "./assets/logo-da-univassouras.png",
     "userInterfaceStyle": "light",
     "splash": {

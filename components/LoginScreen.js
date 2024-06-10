@@ -3,7 +3,7 @@ import { View, Image, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import * as LocalAuthentication from 'expo-local-authentication';
 import { Ionicons } from '@expo/vector-icons';
 
-export function BiometricLogin({ onLogin }) {
+export default function LoginScreen({ navigation }) {
   const [biometricsAvailable, setBiometricsAvailable] = useState(false);
 
   useEffect(() => {
@@ -16,7 +16,7 @@ export function BiometricLogin({ onLogin }) {
   const handleLogin = async () => {
     const authentication = await LocalAuthentication.authenticateAsync();
     if (authentication.success) {
-      onLogin();
+      navigation.navigate('Home');
     }
   };
 
