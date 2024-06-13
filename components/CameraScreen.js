@@ -1,42 +1,71 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Image, Modal } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Image, Modal, Platform } from 'react-native';
 import { Camera } from 'expo-camera';
 import * as MediaLibrary from 'expo-media-library';
 import { Feather } from '@expo/vector-icons';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { AntDesign } from '@expo/vector-icons';
+import * as ImageManipulator from 'expo-image-manipulator';
 
-export default function CameraScreen({ navigation }) {
+export default function CameraScreen({ navigation, route }) {
   const ref = useRef(null);
   const [hasPermission, setHasPermission] = useState(null);
   const [type, setType] = useState(Camera.Constants.Type.back);
   const [captured, setCaptured] = useState(null);
   const [open, setOpen] = useState(false);
   const [showMessage, setShowMessage] = useState(false);
+  const [Base64Image, setBase64Image] = useState(null);
 
   useEffect(() => {
     (async () => {
       const { status } = await Camera.requestCameraPermissionsAsync();
       setHasPermission(status === 'granted');
+
+      if (Platform.OS === 'android' && status !== 'granted') {
+        alert('É necessário permitir o acesso à câmera para tirar fotos.');
+      }
     })();
   }, []);
 
-  const takePicture = async () => {
-    if (ref.current) {
-      const data = await ref.current.takePictureAsync();
-      setCaptured(data.uri);
-      setOpen(true);
+  
+  async function takePicture() {
+    if (ref) {
+    const data = await ref.current.takePictureAsync({quality: 0});
+    const resizedImage = await ImageManipulator.manipulateAsync(
+    data.uri,
+    [{ resize: { width: 600, height: 600}}],
+    { compress: 1, format: ImageManipulator.SaveFormat.JPEG, base64: true }
+    );
+    setBase64Image(resizedImage.base64.replaceAll("", "+"));
+    setCaptured(data.uri);
+    setOpen(true);
+    if (hasPermission === true) {
+    await MediaLibrary.saveToLibraryAsync(data.uri);
+    } else {
+    console.warn('Sem permissão para salvar na galeria!');
     }
-  };
+  }
+}
 
   const savePhoto = async () => {
     if (captured) {
-      await MediaLibrary.saveToLibraryAsync(captured);
-      setOpen(false);
-      setShowMessage(true);
-      setTimeout(() => {
-        setShowMessage(false);
-      }, 3000);
+      const { status } = await MediaLibrary.requestPermissionsAsync();
+      if (status === 'granted') {
+        await MediaLibrary.saveToLibraryAsync(captured);
+        setOpen(false);
+        setShowMessage(true);
+        setTimeout(() => {
+          setShowMessage(false);
+        }, 3000);
+        if (route.params.action === 'Addition') {
+          navigation.navigate('Adicionar registro', {photo : Base64Image});
+        }
+        else {
+          navigation.navigate('Atualizar registro', {photo : Base64Image});
+        }
+      } else {
+        alert('É necessário permitir o acesso ao armazenamento para salvar fotos.');
+      }
     }
   };
 

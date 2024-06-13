@@ -9,16 +9,22 @@ export default function UpdateRecordScreen({ navigation, route }) {
   const [recordLocalization, setRecordLocalization] = useState({latitude : 0, longitude : 0});
 
   useEffect(() => {
-    fetchRecords((success, data) => {
-      if (success) {
-        for (const record of data) {
-          if (record.id === route.params.recordId) {
-            setRecordDescription(record.description);
+    if (route.params?.recordId) {
+      fetchRecords((success, data) => {
+        if (success) {
+          for (const record of data) {
+            if (record.id === route.params.recordId) {
+              setRecordDescription(record.description);
+              setRecordPhoto(record.photo);
+            }
           }
         }
-      }
-    });
-  }, []);
+      });  
+    }
+    if (route.params?.photo) {
+      setRecordPhoto(route.params.photo);
+    }
+  }, [route.params.recordId, route.params.recordPhoto]);
 
   const handleSaveRecord = () => {
     updateRecord(
@@ -47,11 +53,17 @@ export default function UpdateRecordScreen({ navigation, route }) {
         value={recordDescription}
         onChangeText={setRecordDescription}
         multiline={true}
-        numberOfLines={4} // Define um número padrão de linhas visíveis
+        numberOfLines={4}
       />
-      <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Câmera')}>
-        <Text style={styles.buttonText}>Atualizar foto</Text>
-      </TouchableOpacity>
+      {recordPhoto ? (
+        <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Câmera', {action : 'Update'})}>
+          <Text style={styles.buttonText}>{recordPhoto.slice(0, 10)}</Text>
+        </TouchableOpacity>
+      ) : (
+        <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Câmera', {action : 'Update'})}>
+          <Text style={styles.buttonText}>Atualizar foto</Text>
+        </TouchableOpacity>
+      )}
       <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Mapa')}>
         <Text style={styles.buttonText}>Atualizar localização</Text>
       </TouchableOpacity>

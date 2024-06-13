@@ -1,14 +1,26 @@
-import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert } from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
 import { insertRecord } from '../database';
 
-export default function AddRecordScreen({ navigation }) {
+export default function AddRecordScreen({ navigation, route }) {
   const [recordDescription, setRecordDescription] = useState('');
   const [recordPhoto, setRecordPhoto] = useState('');
   const [recordLocalization, setRecordLocalization] = useState({latitude : 0, longitude : 0});
 
+  useEffect(() => {
+    if (route.params?.photo) {
+      setRecordPhoto(route.params?.photo);
+    }
+  }, [route.params?.photo]);
+
   const handleSaveRecord = () => {
+    /*
+    if (!recordDescription || !recordPhoto || recordLocalization.latitude === 0 || recordLocalization.longitude === 0) {
+      Alert.alert('Erro', 'Todos os campos são obrigatórios!');
+      return;
+    }
+    */
     insertRecord(
       recordDescription,
       recordPhoto,
@@ -36,9 +48,13 @@ export default function AddRecordScreen({ navigation }) {
         multiline={true}
         numberOfLines={4} // Define um número padrão de linhas visíveis
       />
-      <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Câmera')}>
+      {recordPhoto ? (
+        <Text>{recordPhoto.slice(0, 10)}</Text>
+      ) : (
+        <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Câmera', {action : 'Addition'})}>
         <Text style={styles.buttonText}>Tirar foto</Text>
-      </TouchableOpacity>
+        </TouchableOpacity>
+      )}
       <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Mapa')}>
         <Text style={styles.buttonText}>Marcar localização</Text>
       </TouchableOpacity>

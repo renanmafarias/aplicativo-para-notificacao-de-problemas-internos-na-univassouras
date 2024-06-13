@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, FlatList, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, Text, FlatList, TouchableOpacity, StyleSheet, Image } from 'react-native';
 import { AntDesign, FontAwesome5 } from '@expo/vector-icons'; 
 import { fetchRecords, deleteRecord, syncRecordsWithFirebase } from '../database';
 
@@ -8,16 +8,39 @@ export default function ListRecordsScreen({ navigation }) {
 
   const renderRecord = ({ item }) => (
     <View style={styles.recordItem}>
-      <Text style={styles.recordText}>{item.description}</Text>
-      <TouchableOpacity
-        onPress={() => {
-          navigation.navigate('Atualizar registro', {recordId : item.id});
-        }}>
-          <Text>Editar</Text>
-      </TouchableOpacity>
-      <TouchableOpacity onPress={() => handleRecordDeletion(item.id)}>
-        <Text>Deletar</Text>
-      </TouchableOpacity>
+      <View style={styles.recordItemRow}>
+        <Text style={styles.recordText}>Descrição:</Text>
+        <Text style={styles.recordValue}>{item.description}</Text>
+      </View>
+      <View style={styles.recordItemRow}>
+        <Text style={styles.recordText}>Foto:</Text>
+        {item.photo ? (
+          //<Image source={{ uri: `data:image/png;base64,${item.photo}` }} style={styles.recordImage} />
+          <Text>{item.photo.slice(0, 30)}</Text>
+        ) : (
+          <Text style={styles.recordText}>Sem foto</Text>
+        )}
+      </View>
+      <View style={styles.recordItemRow}>
+        <Text style={styles.recordText}>Latitude:</Text>
+        <Text style={styles.recordValue}>{item.latitude}</Text>
+      </View>
+      <View style={styles.recordItemRow}>
+        <Text style={styles.recordText}>Longitude:</Text>
+        <Text style={styles.recordValue}>{item.longitude}</Text>
+      </View>
+      <View style={styles.recordItemRow}>
+        <TouchableOpacity
+          style={styles.action}
+          onPress={() => {
+            navigation.navigate('Atualizar registro', { recordId: item.id });
+          }}>
+          <Text style={styles.actionText}>Editar</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.action} onPress={() => handleRecordDeletion(item.id)}>
+          <Text style={styles.actionText}>Deletar</Text>
+        </TouchableOpacity>
+      </View>
     </View>
   );
 
@@ -42,7 +65,6 @@ export default function ListRecordsScreen({ navigation }) {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Listagem de registros</Text>
       {records.length === 0 ? (
           <Text style={styles.noRecordsText}>Não existe registro de problema</Text>
         ) : (
@@ -67,7 +89,6 @@ export default function ListRecordsScreen({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
     padding: 20,
   },
   title: {
@@ -87,16 +108,34 @@ const styles = StyleSheet.create({
     marginVertical: 8,
     borderRadius: 10,
   },
+  recordItemRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 8,
+  },
   recordText: {
     fontSize: 16,
+    fontWeight: 'bold',
+    marginRight: 5,
   },
-  input: {
-    height: 100, // Ajuste a altura para um valor maior
-    borderColor: '#ccc',
-    borderWidth: 1,
-    marginBottom: 20,
+  recordValue: {
+    fontSize: 16,
+  },
+  recordImage: {
+    width: 100,
+    height: 100,
+    resizeMode: 'cover',
+    borderRadius: 5,
+  },
+  action: {
+    margin: 10,
+    backgroundColor: '#6D1D20',
+    borderRadius: 5,
     padding: 10,
-    textAlignVertical: 'top', // Alinha o texto no topo do TextInput
+  },
+  actionText: {
+    color: '#fff',
+    fontSize: 16,
   },
   bottomBar: {
     position: 'absolute',
@@ -115,8 +154,4 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     padding: 10,
   },
-  buttonText: {
-    color: '#fff',
-    textAlign: 'center',
-  }
 });
