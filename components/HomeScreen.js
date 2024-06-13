@@ -7,7 +7,7 @@ export default function HomeScreen({ navigation }) {
     <View style={styles.container}>
       <ImageBackground source={require('../assets/campus-da-univassouras.jpg')} style={styles.imageSection} />
       <View style={styles.contentSection}>
-        <Text style={styles.title}>Seja bem-vindo!</Text>
+        <Text style={styles.title}>Notifique Univassouras</Text>
         <Text style={styles.message}>Navegue pelo aplicativo a partir dos botões abaixo</Text>
       </View>
       <View style={styles.navigationContainer}>
@@ -41,6 +41,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 40,
     fontWeight: '700',
+    textAlign: 'center'
   },
   message: {
     margin: 20,

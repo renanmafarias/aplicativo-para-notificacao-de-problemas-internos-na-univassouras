@@ -62,7 +62,7 @@ export default function ListRecordsScreen({ navigation, route }) {
       }
     });
   };
-
+  
   return (
     <View style={styles.container}>
       {records.length === 0 ? (

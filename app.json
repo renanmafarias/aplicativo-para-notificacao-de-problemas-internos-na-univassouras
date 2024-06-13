@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "Univassouras",
-    "slug": "Univassouras",
+    "name": "Notifique-Univassouras",
+    "slug": "Notifique-Univassouras",
     "version": "1.0.0",
     "icon": "./assets/logo-da-univassouras.png",
     "userInterfaceStyle": "light",
