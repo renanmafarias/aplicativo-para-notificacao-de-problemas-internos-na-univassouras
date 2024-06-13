@@ -20,12 +20,10 @@ export default function AddRecordScreen({ navigation, route }) {
 
 
   const handleSaveRecord = () => {
-    /*
     if (!recordDescription || !recordPhoto || !recordLocalization.latitude || !recordLocalization.longitude) {
       Alert.alert('Erro', 'Todos os campos são obrigatórios!');
       return;
     }
-    */
     insertRecord(
       recordDescription,
       recordPhoto,
