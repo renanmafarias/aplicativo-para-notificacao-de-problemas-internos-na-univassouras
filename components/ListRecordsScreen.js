@@ -3,8 +3,19 @@ import { View, Text, FlatList, TouchableOpacity, StyleSheet, Image } from 'react
 import { AntDesign, FontAwesome5 } from '@expo/vector-icons'; 
 import { fetchRecords, deleteRecord, syncRecordsWithFirebase } from '../database';
 
-export default function ListRecordsScreen({ navigation }) {
+export default function ListRecordsScreen({ navigation, route }) {
   const [records, setRecords] = useState([]);
+
+  useEffect(() => {
+    loadRecords();
+  }, [route.params?.trigger]);
+
+  const loadRecords = () => {
+    fetchRecords((success, records) => {
+      syncRecordsWithFirebase();
+      if (success) setRecords(records);
+    });
+  };
 
   const renderRecord = ({ item }) => (
     <View style={styles.recordItem}>
@@ -16,7 +27,7 @@ export default function ListRecordsScreen({ navigation }) {
         <Text style={styles.recordText}>Foto:</Text>
         {item.photo ? (
           //<Image source={{ uri: `data:image/png;base64,${item.photo}` }} style={styles.recordImage} />
-          <Text>{item.photo.slice(0, 30)}</Text>
+          <Text>{item.photo.slice(item.photo.length - 30)}</Text>
         ) : (
           <Text style={styles.recordText}>Sem foto</Text>
         )}
@@ -33,7 +44,7 @@ export default function ListRecordsScreen({ navigation }) {
         <TouchableOpacity
           style={styles.action}
           onPress={() => {
-            navigation.navigate('Atualizar registro', { recordId: item.id });
+            navigation.navigate('Atualizar registro', { recordId: item.id, recordDescription: item.description, recordPhoto: item.photo, recordLatitude: item.latitude, recordLongitude: item.longitude, trigger : Math.random() });
           }}>
           <Text style={styles.actionText}>Editar</Text>
         </TouchableOpacity>
@@ -43,17 +54,6 @@ export default function ListRecordsScreen({ navigation }) {
       </View>
     </View>
   );
-
-  useEffect(() => {
-    loadRecords();
-  }, []);
-
-  const loadRecords = () => {
-    fetchRecords((success, records) => {
-      syncRecordsWithFirebase();
-      if (success) setRecords(records);
-    });
-  };
 
   const handleRecordDeletion = (recordId) => {
     deleteRecord(recordId, (success, records) => {
@@ -103,9 +103,11 @@ const styles = StyleSheet.create({
     marginTop: 20,
   },
   recordItem: {
-    backgroundColor: '#f9c2ff',
     padding: 20,
     marginVertical: 8,
+    borderWidth: 1,
+    borderStyle: 'solid',
+    borderColor: '#6D1D20',
     borderRadius: 10,
   },
   recordItemRow: {

@@ -9,14 +9,19 @@ export default function AddRecordScreen({ navigation, route }) {
   const [recordLocalization, setRecordLocalization] = useState({latitude : 0, longitude : 0});
 
   useEffect(() => {
-    if (route.params?.photo) {
-      setRecordPhoto(route.params?.photo);
-    }
-  }, [route.params?.photo]);
+    if (route.params?.recordPhoto) setRecordPhoto(route.params.recordPhoto);
+  }, [route.params?.recordPhoto]);
+
+  useEffect(() => {
+    if (route.params?.recordLatitude && route.params?.recordLongitude) setRecordLocalization(
+      {latitude : route.params.recordLatitude, longitude : route.params.recordLongitude}
+    );
+  }, [route.params?.recordLatitude, route.params?.recordLongitude]);
+
 
   const handleSaveRecord = () => {
     /*
-    if (!recordDescription || !recordPhoto || recordLocalization.latitude === 0 || recordLocalization.longitude === 0) {
+    if (!recordDescription || !recordPhoto || !recordLocalization.latitude || !recordLocalization.longitude) {
       Alert.alert('Erro', 'Todos os campos são obrigatórios!');
       return;
     }
@@ -26,9 +31,9 @@ export default function AddRecordScreen({ navigation, route }) {
       recordPhoto,
       recordLocalization.latitude,
       recordLocalization.longitude,
-      (success, data) => {
+      (success, records) => {
         if (success) {
-          navigation.navigate('Listar registros');
+          navigation.navigate('Listar registros', {trigger : Math.random()});
         }
       }
     );
@@ -46,18 +51,28 @@ export default function AddRecordScreen({ navigation, route }) {
         value={recordDescription}
         onChangeText={setRecordDescription}
         multiline={true}
-        numberOfLines={4} // Define um número padrão de linhas visíveis
+        numberOfLines={4}
       />
       {recordPhoto ? (
-        <Text>{recordPhoto.slice(0, 10)}</Text>
+        <Text style={styles.locationText}>Foto (base 64): <Text style={styles.locationValue}>{recordPhoto.slice(recordPhoto.length - 30)}</Text></Text>
       ) : (
         <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Câmera', {action : 'Addition'})}>
         <Text style={styles.buttonText}>Tirar foto</Text>
         </TouchableOpacity>
       )}
-      <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Mapa')}>
+      {recordLocalization.latitude ? (
+        <>
+          <View style={styles.line} />
+          <View style={styles.locationContainer}>
+            <Text style={styles.locationText}>Latitude: <Text style={styles.locationValue}>{recordLocalization.latitude}</Text></Text>
+            <Text style={styles.locationText}>Longitude: <Text style={styles.locationValue}>{recordLocalization.longitude}</Text></Text>
+          </View>
+        </>
+      ) : (
+        <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Mapa', {action : 'Addition'})}>
         <Text style={styles.buttonText}>Marcar localização</Text>
       </TouchableOpacity>
+      )}
       <TouchableOpacity style={styles.submitButton} onPress={handleSaveRecord}>
         <Text style={styles.submitButtonText}>Gravar registro</Text>
       </TouchableOpacity>
@@ -90,6 +105,22 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     padding: 10,
     textAlignVertical: 'top', // Alinha o texto no topo do TextInput
+  },
+  line: {
+    borderBottomColor: '#ccc',
+    borderBottomWidth: 1,
+    marginVertical: 10,
+  },
+  locationContainer: {
+    marginBottom: 20,
+  },
+  locationText: {
+    color: '#6D1D20',
+    fontWeight: 'bold',
+  },
+  locationValue: {
+    color: '#000',
+    fontWeight: 'bold',
   },
   button: {
     borderWidth: 1,

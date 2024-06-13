@@ -4,38 +4,28 @@ import { AntDesign } from '@expo/vector-icons';
 import { fetchRecords, updateRecord } from '../database';
 
 export default function UpdateRecordScreen({ navigation, route }) {
+  const [recordId, setRecordId] = useState('');
   const [recordDescription, setRecordDescription] = useState('');
   const [recordPhoto, setRecordPhoto] = useState('');
-  const [recordLocalization, setRecordLocalization] = useState({latitude : 0, longitude : 0});
+  const [recordLocalization, setRecordLocalization] = useState({});
 
-  useEffect(() => {
-    if (route.params?.recordId) {
-      fetchRecords((success, data) => {
-        if (success) {
-          for (const record of data) {
-            if (record.id === route.params.recordId) {
-              setRecordDescription(record.description);
-              setRecordPhoto(record.photo);
-            }
-          }
-        }
-      });  
-    }
-    if (route.params?.photo) {
-      setRecordPhoto(route.params.photo);
-    }
-  }, [route.params.recordId, route.params.recordPhoto]);
+useEffect(() => {
+  setRecordId(route.params?.recordId);
+  setRecordDescription(route.params?.recordDescription);
+  setRecordPhoto(route.params?.recordPhoto);
+  setRecordLocalization({latitude : route.params?.recordLatitude, longitude : route.params?.recordLongitude});
+}, [route.params?.trigger]);
 
   const handleSaveRecord = () => {
     updateRecord(
-      route.params.recordId,
+      recordId,
       recordDescription,
       recordPhoto,
       recordLocalization.latitude,
       recordLocalization.longitude,
       (success, records) => {
         if (success) {
-          navigation.navigate('Listar registros');
+          navigation.navigate('Listar registros', {trigger : Math.random()});
         }
       }
     );
@@ -46,7 +36,7 @@ export default function UpdateRecordScreen({ navigation, route }) {
       <TouchableOpacity style={styles.closeButton} onPress={() => navigation.navigate('Listar registros')}>
         <AntDesign name="close" size={24} color="black" />
       </TouchableOpacity>
-      <Text style={styles.title}>Atualizar registro {route.params.recordId}</Text>
+      <Text style={styles.title}>Atualizar registro {route.params?.recordId}</Text>
       <TextInput
         style={styles.input}
         placeholder="Descreva o problema:"
@@ -55,20 +45,24 @@ export default function UpdateRecordScreen({ navigation, route }) {
         multiline={true}
         numberOfLines={4}
       />
-      {recordPhoto ? (
-        <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Câmera', {action : 'Update'})}>
-          <Text style={styles.buttonText}>{recordPhoto.slice(0, 10)}</Text>
-        </TouchableOpacity>
-      ) : (
-        <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Câmera', {action : 'Update'})}>
-          <Text style={styles.buttonText}>Atualizar foto</Text>
-        </TouchableOpacity>
-      )}
-      <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Mapa')}>
+      <Text style={styles.locationText}>Foto (base 64): <Text style={styles.locationValue}>{recordPhoto.slice(recordPhoto.length - 30)}</Text></Text>
+      <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Câmera', {action : 'Update', recordId : recordId, recordPhoto : recordPhoto, recordDescription : recordDescription, recordLatitude : recordLocalization.latitude, recordLongitude : recordLocalization.longitude})}>
+        <Text style={styles.buttonText}>Atualizar foto</Text>
+      </TouchableOpacity>
+
+      <View style={styles.line} />
+      
+      <View style={styles.locationContainer}>
+        <Text style={styles.locationText}>Latitude: <Text style={styles.locationValue}>{recordLocalization.latitude}</Text></Text>
+        <Text style={styles.locationText}>Longitude: <Text style={styles.locationValue}>{recordLocalization.longitude}</Text></Text>
+      </View>
+
+      <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Mapa', {action : 'Update', action : 'Update', recordId : recordId, recordPhoto : recordPhoto, recordDescription : recordDescription, recordLatitude : recordLocalization.latitude, recordLongitude : recordLocalization.longitude})}>
         <Text style={styles.buttonText}>Atualizar localização</Text>
       </TouchableOpacity>
+
       <TouchableOpacity style={styles.submitButton} onPress={handleSaveRecord}>
-        <Text style={styles.submitButtonText}>Atualizar registro</Text>
+        <Text style={styles.submitButtonText}>Salvar</Text>
       </TouchableOpacity>
     </View>
   );
@@ -99,6 +93,22 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     padding: 10,
     textAlignVertical: 'top', // Alinha o texto no topo do TextInput
+  },
+  line: {
+    borderBottomColor: '#ccc',
+    borderBottomWidth: 1,
+    marginVertical: 10,
+  },
+  locationContainer: {
+    marginBottom: 20,
+  },
+  locationText: {
+    color: '#6D1D20',
+    fontWeight: 'bold',
+  },
+  locationValue: {
+    color: '#000',
+    fontWeight: 'bold',
   },
   button: {
     borderWidth: 1,

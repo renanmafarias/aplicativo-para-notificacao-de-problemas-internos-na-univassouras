@@ -1,7 +1,6 @@
 import React from 'react';
 import { View, Text, ImageBackground, TouchableOpacity, StyleSheet } from 'react-native';
 import { Entypo, FontAwesome5 } from '@expo/vector-icons';
-import { syncRecordsWithFirebase } from '../database';
 
 export default function HomeScreen({ navigation }) {
   return (
@@ -15,7 +14,7 @@ export default function HomeScreen({ navigation }) {
         <TouchableOpacity style={styles.navButton} onPress={() => navigation.navigate('Adicionar registro')}>
           <FontAwesome5 name="plus" size={24} color="white" />
         </TouchableOpacity>
-        <TouchableOpacity style={styles.navButton} onPress={() => navigation.navigate('Listar registros')}>
+        <TouchableOpacity style={styles.navButton} onPress={() => navigation.navigate('Listar registros', {trigger : Math.random()})}>
           <FontAwesome5 name="list" size={24} color="white" /> 
         </TouchableOpacity>
         <TouchableOpacity style={styles.navButton} onPress={() => navigation.navigate('Login')}>

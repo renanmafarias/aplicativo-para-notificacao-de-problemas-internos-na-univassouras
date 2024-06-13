@@ -3,10 +3,12 @@ import MapView, { Marker } from 'react-native-maps';
 import { StyleSheet, View, TouchableOpacity, Text } from 'react-native';
 import * as Location from 'expo-location';
 
-export default function MapScreen({ navigation }) {
+export default function MapScreen({ navigation, route }) {
   const [location, setLocation] = useState(null);
   const [errorMsg, setErrorMsg] = useState(null);
   const [newMarkerCoords, setNewMarkerCoords] = useState(null);
+  const [latitude, setLatitude] = useState(null);
+  const [longitude, setLongitude] = useState(null);
 
   useEffect(() => {
     (async () => {
@@ -20,6 +22,15 @@ export default function MapScreen({ navigation }) {
       setLocation(location.coords);
     })();
   }, []);
+
+  const handleSave = () => {
+    if (route.params.action === 'Addition') {
+      navigation.navigate('Adicionar registro', {recordLatitude : latitude, recordLongitude : longitude});
+    }
+    else {
+      navigation.navigate('Atualizar registro', {recordId : route.params.recordId, recordDescription : route.params.recordDescription, recordPhoto : route.params.recordPhoto, recordLatitude : latitude, recordLongitude : longitude, trigger : Math.random()});
+    }
+}
 
   const handleMapPress = (event) => {
     setNewMarkerCoords(event.nativeEvent.coordinate);
@@ -36,7 +47,8 @@ export default function MapScreen({ navigation }) {
     <View style={styles.container}>
       <MapView
         loadingEnabled={true}
-        onPress={handleMapPress} 
+        onMapLoaded={() => {setLatitude(location.latitude); setLongitude(location.longitude)}}
+        onPress={handleMapPress}
         region={
           location
             ? {
@@ -73,6 +85,9 @@ export default function MapScreen({ navigation }) {
       <View style={styles.buttonSection}>
         <TouchableOpacity style={styles.button} onPress={() => navigation.goBack()}> 
           <Text style={styles.buttonText}>Voltar</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.button} onPress={handleSave}> 
+          <Text style={styles.buttonText}>Enviar</Text>
         </TouchableOpacity>
       </View>
     </View>

@@ -17,9 +17,9 @@ export default function App() {
       <Stack.Navigator initialRouteName="Login" screenOptions={{headerStyle : {backgroundColor : '#6D1D20'}, headerTintColor : '#fff', headerBackVisible : false}}>
         <Stack.Screen name="Login" component={LoginScreen}></Stack.Screen>
         <Stack.Screen name="Home" component={HomeScreen}></Stack.Screen>
-        <Stack.Screen name="Listar registros" component={ListRecordsScreen}></Stack.Screen>
         <Stack.Screen name="Adicionar registro" component={AddRecordScreen}></Stack.Screen>
         <Stack.Screen name="Atualizar registro" component={UpdateRecordScreen}></Stack.Screen>
+        <Stack.Screen name="Listar registros" component={ListRecordsScreen}></Stack.Screen>
         <Stack.Screen name="Câmera" component={CameraScreen}></Stack.Screen>
         <Stack.Screen name="Mapa" component={MapScreen}></Stack.Screen>
       </Stack.Navigator>

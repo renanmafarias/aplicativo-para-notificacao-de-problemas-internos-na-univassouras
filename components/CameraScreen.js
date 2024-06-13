@@ -58,10 +58,10 @@ export default function CameraScreen({ navigation, route }) {
           setShowMessage(false);
         }, 3000);
         if (route.params.action === 'Addition') {
-          navigation.navigate('Adicionar registro', {photo : Base64Image});
+          navigation.navigate('Adicionar registro', {recordPhoto : Base64Image});
         }
         else {
-          navigation.navigate('Atualizar registro', {photo : Base64Image});
+          navigation.navigate('Atualizar registro', {recordId : route.params.recordId, recordDescription : route.params.recordDescription, recordPhoto : Base64Image, recordLatitude : route.params.recordLatitude, recordLongitude : route.params.recordLongitude, trigger : Math.random()});
         }
       } else {
         alert('É necessário permitir o acesso ao armazenamento para salvar fotos.');
