@@ -26,8 +26,7 @@ export default function ListRecordsScreen({ navigation, route }) {
       <View style={styles.recordItemRow}>
         <Text style={styles.recordText}>Foto:</Text>
         {item.photo ? (
-          //<Image source={{ uri: `data:image/png;base64,${item.photo}` }} style={styles.recordImage} />
-          <Text>{item.photo.slice(item.photo.length - 30)}</Text>
+          <Image source={{ uri: `data:image/png;base64,${item.photo}` }} style={styles.recordImage} />
         ) : (
           <Text style={styles.recordText}>Sem foto</Text>
         )}

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, Image, Alert } from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
 import { insertRecord } from '../database';
 
@@ -52,8 +52,8 @@ export default function AddRecordScreen({ navigation, route }) {
         numberOfLines={4}
       />
       {recordPhoto ? (
-        <Text style={styles.locationText}>Foto (base 64): <Text style={styles.locationValue}>{recordPhoto.slice(recordPhoto.length - 30)}</Text></Text>
-      ) : (
+          <Image source={{ uri: `data:image/png;base64,${route.params.recordPhoto}` }} style={styles.recordImage} />
+        ) : (
         <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Câmera', {action : 'Addition'})}>
         <Text style={styles.buttonText}>Tirar foto</Text>
         </TouchableOpacity>
@@ -95,6 +95,15 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     marginBottom: 20,
     textAlign: 'center',
+  },
+  recordImage: {
+    width: 300,
+    height: 300,
+    marginLeft: 'auto',
+    marginRight: 'auto',
+    marginBottom: 20,
+    resizeMode: 'cover',
+    borderRadius: 5,
   },
   input: {
     height: 100, // Ajuste a altura para um valor maior

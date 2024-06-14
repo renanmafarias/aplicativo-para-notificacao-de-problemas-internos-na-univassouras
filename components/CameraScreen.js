@@ -36,7 +36,7 @@ export default function CameraScreen({ navigation, route }) {
     [{ resize: { width: 600, height: 600}}],
     { compress: 1, format: ImageManipulator.SaveFormat.JPEG, base64: true }
     );
-    setBase64Image(resizedImage.base64.replaceAll("", "+"));
+    setBase64Image(resizedImage.base64);
     setCaptured(data.uri);
     setOpen(true);
     if (hasPermission === true) {
